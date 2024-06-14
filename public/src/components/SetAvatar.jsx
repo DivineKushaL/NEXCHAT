@@ -10,6 +10,8 @@ import { setAvatarRoute } from "../utils/APIRoutes";
 export default function SetAvatar() {
   const api = `https://api.multiavatar.com/4645646`;
   const navigate = useNavigate();
+
+  
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAvatar, setSelectedAvatar] = useState(undefined);
@@ -27,17 +29,21 @@ export default function SetAvatar() {
   }, []);
 
   const setProfilePicture = async () => {
+    //check if value is not set yet
     if (selectedAvatar === undefined) {
       toast.error("Please select an avatar", toastOptions);
     } else {
+      //get the user from local storage 
       const user = await JSON.parse(
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
-
+      //get the data from route
       const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
         image: avatars[selectedAvatar],
       });
+      
 
+      //if data is set then update the data in user schema in json string formatting 
       if (data.isSet) {
         user.isAvatarImageSet = true;
         user.avatarImage = data.image;
@@ -52,18 +58,29 @@ export default function SetAvatar() {
     }
   };
 
-  useEffect(async () => {
-    const data = [];
-    for (let i = 0; i < 4; i++) {
-      const image = await axios.get(
-        `${api}/${Math.round(Math.random() * 1000)}`
-      );
-      const buffer = new Buffer(image.data);
-      data.push(buffer.toString("base64"));
-    }
-    setAvatars(data);
-    setIsLoading(false);
-  }, []);
+useEffect( () => {
+
+const sampleFunction = async()=>{
+const data = [];
+
+//api calling to get dummy avatars which we will store in data array 
+for (let i = 0; i < 5; i++) {
+const image = await axios.get(
+`${api}/${Math.round(Math.random() * 1000)}`
+);
+
+//convert binary data to base64 string 
+const buffer = new Buffer(image.data);
+data.push(buffer.toString("base64"));
+} 
+setAvatars(data);
+setIsLoading(false);
+}
+sampleFunction();
+
+}, []);
+
+
   return (
     <>
       {isLoading ? (
@@ -76,6 +93,7 @@ export default function SetAvatar() {
             <h1>Pick an Avatar as your profile picture</h1>
           </div>
           <div className="avatars">
+          {/* mapping each avatars  */}
             {avatars.map((avatar, index) => {
               return (
                 <div
@@ -109,7 +127,7 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 3rem;
-  background-color: #131324;
+  background-color: #282c34;
   height: 100vh;
   width: 100vw;
 
@@ -124,7 +142,7 @@ const Container = styled.div`
   }
   .avatars {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
 
     .avatar {
       border: 0.4rem solid transparent;
@@ -140,21 +158,21 @@ const Container = styled.div`
       }
     }
     .selected {
-      border: 0.4rem solid #4e0eff;
+      border: 0.4rem solid #5b8690;
     }
   }
   .submit-btn {
-    background-color: #4e0eff;
+    background-color: #5b8690;
     color: white;
     padding: 1rem 2rem;
     border: none;
     font-weight: bold;
     cursor: pointer;
-    border-radius: 0.4rem;
+    border-radius: 0.3rem;
     font-size: 1rem;
     text-transform: uppercase;
     &:hover {
-      background-color: #4e0eff;
+      background-color: #61dafb;
     }
   }
 `;

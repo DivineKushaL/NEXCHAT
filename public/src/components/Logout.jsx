@@ -6,6 +6,8 @@ import axios from "axios";
 import { logoutRoute } from "../utils/APIRoutes";
 export default function Logout() {
   const navigate = useNavigate();
+
+  
   const handleClick = async () => {
     const id = await JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
@@ -29,11 +31,11 @@ const Button = styled.button`
   align-items: center;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  background-color: #9a86f3;
+  background-color: #5b8690;
   border: none;
   cursor: pointer;
   svg {
-    font-size: 1.3rem;
-    color: #ebe7ff;
+    font-size: 1.5rem;
+    // color: #ebe7ff;
   }
 `;
