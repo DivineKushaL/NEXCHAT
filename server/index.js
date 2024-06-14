@@ -10,6 +10,7 @@ const messageRoutes = require("./routes/messages");
 const app = express();
 //sockets for synchrounous chatting 
 const socket = require("socket.io");
+const path =require("path");
 require("dotenv").config();
 
 
@@ -41,6 +42,35 @@ app.get("/ping", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes); 
 
+
+//******************deployment********************/
+const __dirname1 = path.resolve();
+if(process.env.NODE_ENV=='production'){
+  app.use(express.static(path.join(__dirname1,'/public/build')));
+
+  app.get('*',(req,res)=>{
+    res.sendFile(path.resolve(__dirname1,"public","build","index.html"));
+  })
+}
+else{
+  app.get("/",(res,req)=>{
+    res.send("API IS RUNNING");
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//******************deployment********************/
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)
 );
