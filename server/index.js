@@ -17,7 +17,7 @@ require("dotenv").config();
 //middlewares used 
 app.use(cors(
   {
-    origin: ["https://nexchat.vercel.app"],
+    origin: ["https://nexchat-nu.vercel.app"],
     methods: ["GET","POST"],
     credentials: true
   }
