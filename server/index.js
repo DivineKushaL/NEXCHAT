@@ -15,18 +15,19 @@ require("dotenv").config();
 
 
 //middlewares used 
-app.use(cors(
-  {
-    origin: ["https://nexchat.vercel.app"],
-    methods: ["GET","POST"],
-    credentials: true
-  }
-));
+app.use(cors());
 app.use(express.json());
 
+
+const MONGO_URL = process.env.MONGO_URL;
+
+if (!MONGO_URL) {
+  console.error('MONGO_URL is not defined. Please set it in the .env file.');
+  process.exit(1);
+}
 //to connect the mongodb database
 mongoose
-  .connect(process.env.MONGO_URL, {
+  .connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -50,24 +51,20 @@ app.use("/api/messages", messageRoutes);
 
 
 //******************deployment********************/
-// const __dirname1 = path.resolve();
-// if(process.env.NODE_ENV=='production'){
-//   app.use(express.static(path.join(__dirname1,'/public/build')));
+const __dirname1 = path.resolve();
+  app.use(express.static(path.join(__dirname1,'/public/build')));
 
-//   app.get('*',(req,res)=>{
-//     res.sendFile(path.resolve(__dirname1,"public","build","index.html"));
-//   })
-// }
-// else{
-//   app.get("/",(res,req)=>{
-//     res.send("API IS RUNNING");
-//   });
-// }
+
+  app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname1,"public","build","index.html"));
+  })
+
 //******************deployment********************/
 
 
-const server = app.listen(process.env.PORT, () =>
-  console.log(`Server started on ${process.env.PORT}`)
+const PORT=5000 || process.env.PORT;
+const server = app.listen(PORT, () =>
+  console.log(`Server started on ${PORT}`)
 );
 
 const io = socket(server, {
