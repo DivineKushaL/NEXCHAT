@@ -15,7 +15,13 @@ require("dotenv").config();
 
 
 //middlewares used 
-app.use(cors());
+app.use(cors(
+  {
+    origin: ["https://nexchat.vercel.app"],
+    methods: ["GET","POST"],
+    credentials: true
+  }
+));
 app.use(express.json());
 
 //to connect the mongodb database
@@ -44,33 +50,22 @@ app.use("/api/messages", messageRoutes);
 
 
 //******************deployment********************/
-const __dirname1 = path.resolve();
-if(process.env.NODE_ENV=='production'){
-  app.use(express.static(path.join(__dirname1,'/public/build')));
+// const __dirname1 = path.resolve();
+// if(process.env.NODE_ENV=='production'){
+//   app.use(express.static(path.join(__dirname1,'/public/build')));
 
-  app.get('*',(req,res)=>{
-    res.sendFile(path.resolve(__dirname1,"public","build","index.html"));
-  })
-}
-else{
-  app.get("/",(res,req)=>{
-    res.send("API IS RUNNING");
-  });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+//   app.get('*',(req,res)=>{
+//     res.sendFile(path.resolve(__dirname1,"public","build","index.html"));
+//   })
+// }
+// else{
+//   app.get("/",(res,req)=>{
+//     res.send("API IS RUNNING");
+//   });
+// }
 //******************deployment********************/
+
+
 const server = app.listen(process.env.PORT, () =>
   console.log(`Server started on ${process.env.PORT}`)
 );
