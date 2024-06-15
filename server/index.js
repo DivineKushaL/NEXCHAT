@@ -15,7 +15,10 @@ require("dotenv").config();
 
 
 //middlewares used 
-app.use(cors());
+app.use(cors({
+  origin: ["https://nexchat-1.onrender.com"],
+    credentials: true,
+}  ));
 app.use(express.json());
 
 
@@ -69,7 +72,7 @@ const server = app.listen(PORT, () =>
 
 const io = socket(server, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["https://nexchat-1.onrender.com"],
     credentials: true,
   },
 });
