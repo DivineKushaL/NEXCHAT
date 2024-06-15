@@ -21,10 +21,6 @@ app.use(express.json());
 
 const MONGO_URL = process.env.MONGO_URL;
 
-if (!MONGO_URL) {
-  console.error('MONGO_URL is not defined. Please set it in the .env file.');
-  process.exit(1);
-}
 //to connect the mongodb database
 mongoose
   .connect(MONGO_URL, {
